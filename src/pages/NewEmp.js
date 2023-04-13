@@ -21,9 +21,25 @@ const validateMessages = {
 };
 /* eslint-enable no-template-curly-in-string */
 
-const onFinish = (values) => {
-  console.log(values);
+const onFinish = async (values) => {
+  let formdata = new FormData();
+  formdata.append("name", values.user.name);
+  formdata.append("designation", values.user.designation);
+  formdata.append("email", values.user.email);
+  formdata.append("mobile", values.user.mobile);
+
+  const response = await fetch("http://192.168.1.20/apicrudphp/api/create.php", {
+    method: "POST",
+    body: formdata
+  })
+  const data = await response.json();
+  
+  if(data === 1)
+    alert("Success!!")
+  else 
+    alert("failed")
 };
+
 const NewEmp = () => {
   return (
     <>

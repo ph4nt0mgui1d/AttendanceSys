@@ -46,8 +46,7 @@ const EmpTable = () => {
   const [spin, setSpin] = useState(false);
   async function getData() {
     setSpin(true);
-    // firebase api
-    const response = await fetch("http://localhost/apicrudphp/api/read.php");
+    const response = await fetch("http://192.168.1.20/apicrudphp/api/read.php");
     const data = await response.json();
     setSpin(false);
     // console.log(data);

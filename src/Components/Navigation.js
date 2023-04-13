@@ -1,41 +1,27 @@
-import { UploadOutlined, UserOutlined, PieChartOutlined } from '@ant-design/icons';
+import { UploadOutlined, UnorderedListOutlined, UserOutlined, PieChartOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
 import { Avatar, Space } from 'antd';
 import Button from '@mui/material/Button';
 import { Layout, Menu, theme } from 'antd';
-import React, { useState } from 'react';
-import EmpTable from './EmpTable';
+import { Link } from 'react-router-dom';
 import './Navigation.css'
-import { Desk } from '@mui/icons-material';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
+const { SubMenu, Item } = Menu
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem('Admin', 'admin', <UserOutlined />),
-  getItem('Status', 'status', <PieChartOutlined />),
-  getItem('Employees', 'sub1', <UserOutlined />, [
-    getItem('Employees List', 'list'),
-    getItem('New Employee', 'form'),
-    getItem('Attendance', 'attendance'),
-  ]),
-]
-
-const Navigation = () => {
+const Navigation = (props) => {
   const [current, setCurrent] = useState("list")
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const navClickHandler = (e) => {
+    setCurrent(e.key);
+  }
+
   return (
     <Layout className='whole_page'>
-      {/* Main nav */}
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
@@ -46,21 +32,34 @@ const Navigation = () => {
           console.log(collapsed, type);
         }}
       >
-        <Space direction="vertical" size={16}>
+      <Space direction="vertical" size={16}>
           <Space wrap size={16}>
-            <Avatar size={104} icon={<UserOutlined />} />
+            <Avatar size={104} style={{ marginBottom: "20px" }} icon={<UserOutlined />} />
           </Space>
         </Space>
-
+        {/* Main nav start*/}
         <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['sub1']}
-          items={items}
-        />
-      </Sider>
+        <Menu onClick={navClickHandler} theme="dark" mode="inline" defaultSelectedKeys={[current]}>
+          <Item key='admin' icon={<UserOutlined />}>
+            <Link to={"/admin"}>Admin</Link>
+          </Item>
+          <Item key='status' icon={<PieChartOutlined />}>
+            <Link to="/status">Status</Link>
+          </Item>
+          <Item key='list' icon={<UnorderedListOutlined />}>
+            <Link to="/empList">Employees</Link>
+          </Item>
+          <SubMenu key='submenu' title='Employee action'>
+            <Item key='form' icon={<UploadOutlined />}>
+              <Link to="/newform">New Employee</Link>
+            </Item>
+            <Item key='attendance' icon={<PieChartOutlined />}>
+              <Link to="/attendance">Attendance</Link>
+            </Item>
+          </SubMenu>
+        </Menu>
       {/* Main Nav end  */}
+      </Sider>
       <Layout>
         <Header
           style={{
@@ -71,7 +70,7 @@ const Navigation = () => {
           {/* <div style={{display: 'flex'}}> */}
           {/* <h2>Attendance System</h2> */}
           <Button variant="contained" style={{ float: 'right', margin: '12px' }}>
-            Admin
+            Log out
           </Button>
           {/* </div> */}
         </Header>
@@ -87,11 +86,12 @@ const Navigation = () => {
               background: colorBgContainer,
             }}
           >
-            <EmpTable />
+            {props.children}
           </div>
         </Content>
       </Layout>
     </Layout>
+
   );
 };
 export default Navigation;

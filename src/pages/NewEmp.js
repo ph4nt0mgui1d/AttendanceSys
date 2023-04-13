@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input, InputNumber, Alert, Space } from "antd";
 const layout = {
   labelCol: {
     span: 8,
@@ -28,27 +28,28 @@ const onFinish = async (values) => {
   formdata.append("email", values.user.email);
   formdata.append("mobile", values.user.mobile);
 
-  const response = await fetch("http://192.168.1.20/apicrudphp/api/create.php", {
-    method: "POST",
-    body: formdata
-  })
+  const response = await fetch(
+    "http://192.168.1.20/apicrudphp/api/create.php",
+    {
+      method: "POST",
+      body: formdata,
+    }
+  );
   const data = await response.json();
-  
-  if(data === 1)
-    alert("Success!!")
-  else 
-    alert("failed")
+
+  if (data === 1) alert("Success!!");
+  else alert("failed");
 };
 
 const NewEmp = () => {
   return (
-    <>
+    <div style={{ width: "100%", display: "flex" }}>
       <Form
         {...layout}
         name="nest-messages"
         onFinish={onFinish}
         style={{
-          maxWidth: 600,
+          width: "600px",
         }}
         validateMessages={validateMessages}
       >
@@ -112,7 +113,14 @@ const NewEmp = () => {
           </Button>
         </Form.Item>
       </Form>
-    </>
+      <Alert
+        message="Success Tips"
+        description="Detailed description and advice about successful copywriting."
+        type="success"
+        showIcon
+        style={{ width: "30%", position: "absolute", right: "30px" }}
+      />
+    </div>
   );
 };
 

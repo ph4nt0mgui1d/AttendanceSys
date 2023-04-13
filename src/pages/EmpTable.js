@@ -1,79 +1,84 @@
 import React, { useState, useEffect } from "react";
-import { Layout } from 'antd';
-import '../Components/Navigation.css';
-import { Table } from 'antd';
-
-import Navigation from "../Components/Navigation";
-
-
-const { Content } = Layout;
+import "../Components/Navigation.css";
+import { Button, Table, Space, Spin } from "antd";
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    // sorter: true,
-    // render: (name) => `${name.first} ${name.last}`,
-    width: '20%',
+    title: "S.No.",
+    dataIndex: "sno",
+    width: "10%",
   },
   {
-    title: 'Designation',
-    dataIndex: 'designation',
-    key: 'designation',
-    filters: [
-      {
-        text: 'Developer',
-        value: 'developer',
-      },
-      {
-        text: 'Analyst',
-        value: 'analyst',
-      },
-      {
-        text: 'Tester',
-        value: 'tester',
-      },
-    ],
-    width: '20%',
+    title: "Emp Id",
+    dataIndex: "id",
+    width: "10%",
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: "20%",
+  },
+  {
+    title: "Designation",
+    dataIndex: "designation",
+    width: "20%",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    width: "20%",
+  },
+  {
+    title: "Mobile",
+    dataIndex: "mobile",
+    width: "10%",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    width: "10%",
   },
 ];
 
 const EmpTable = () => {
   const [loadData, setLoadData] = useState([]);
+  const [spin, setSpin] = useState(false);
   async function getData() {
+    setSpin(true);
     // firebase api
-    const response = await fetch(
-      "https://attendancesys-40864-default-rtdb.firebaseio.com/empData.json"
-    );
+    const response = await fetch("http://localhost/apicrudphp/api/read.php");
     const data = await response.json();
+    setSpin(false);
+    // console.log(data);
     const loadEmpdata = [];
     for (const key in data) {
       loadEmpdata.push({
-        name: data[key].empName,
-        designation: data[key].empDesignation,
+        sno: Number(key) + 1,
+        id: `EMP` + (Number(data[key].id) + 222),
+        name: data[key].name,
+        designation: data[key].designation,
+        email: data[key].email,
+        mobile: data[key].mobile,
+        action: <Button>Edit</Button>,
       });
     }
     setLoadData(loadEmpdata);
   }
   useEffect(() => {
     getData();
-  }, [])
+  }, []);
 
-
-
-  return <>
-  <Navigation>  
-    <Table dataSource={loadData} columns={columns} />
-  </Navigation>
-  </>
-}
+  return (
+    <>
+      <Table
+        dataSource={loadData}
+        columns={columns}
+        pagination={{ pageSize: 8 }}
+        loading={{ indicator: <Spin />, spinning: spin }}
+      ></Table>
+    </>
+  );
+};
 
 export default EmpTable;
-
-
-

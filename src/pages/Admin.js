@@ -1,10 +1,8 @@
 import React from "react";
-import Navigation from "../Components/Navigation";
+import { useLocation } from "react-router-dom";
 
-function Admin(){
-  return <Navigation>
-    <h1>Admin</h1>
-  </Navigation>
+function Admin() {
+  return <h1>Admin</h1>;
 }
 
-export default Admin
+export default Admin;

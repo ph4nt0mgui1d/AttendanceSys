@@ -1,10 +1,7 @@
 import React from "react";
-import Navigation from "../Components/Navigation";
 
-function Status(){
-  return <Navigation>
-    <h1>Status</h1>
-  </Navigation>
+function Status() {
+  return <h1>Status</h1>;
 }
 
-export default Status
+export default Status;

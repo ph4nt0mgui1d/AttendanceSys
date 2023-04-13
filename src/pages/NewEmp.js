@@ -1,5 +1,4 @@
-import { Button, Form, Input, InputNumber } from 'antd';
-import Navigation from '../Components/Navigation';
+import { Button, Form, Input, InputNumber } from "antd";
 const layout = {
   labelCol: {
     span: 8,
@@ -11,13 +10,13 @@ const layout = {
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
-  required: '${label} is required!',
+  required: "${label} is required!",
   types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
+    email: "${label} is not a valid email!",
+    number: "${label} is not a valid number!",
   },
   number: {
-    range: '${label} must be between ${min} and ${max}',
+    range: "${label} must be between ${min} and ${max}",
   },
 };
 /* eslint-enable no-template-curly-in-string */
@@ -27,7 +26,7 @@ const onFinish = (values) => {
 };
 const NewEmp = () => {
   return (
-    <Navigation>
+    <>
       <Form
         {...layout}
         name="nest-messages"
@@ -38,7 +37,7 @@ const NewEmp = () => {
         validateMessages={validateMessages}
       >
         <Form.Item
-          name={['user', 'name']}
+          name={["user", "name"]}
           label="Name"
           rules={[
             {
@@ -50,7 +49,7 @@ const NewEmp = () => {
         </Form.Item>
 
         <Form.Item
-          name={['user', 'designation']}
+          name={["user", "designation"]}
           label="Designation"
           rules={[
             {
@@ -62,32 +61,30 @@ const NewEmp = () => {
         </Form.Item>
 
         <Form.Item
-          name={['user', 'email']}
+          name={["user", "email"]}
           label="Email"
           rules={[
             {
               required: true,
-              type: 'email',
+              type: "email",
             },
           ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name={['user', 'mobile']}
+          name={["user", "mobile"]}
           label="Mobile"
           rules={[
             {
               required: true,
-              type: 'number',
-
+              type: "number",
             },
           ]}
         >
-          <InputNumber style={{width:'100%'}}/>
+          <InputNumber style={{ width: "100%" }} />
         </Form.Item>
-       
-       
+
         <Form.Item
           wrapperCol={{
             ...layout.wrapperCol,
@@ -99,8 +96,8 @@ const NewEmp = () => {
           </Button>
         </Form.Item>
       </Form>
-    </Navigation>
-  )
-}
+    </>
+  );
+};
 
 export default NewEmp;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../Components/Navigation.css";
-import { Button, Table, Space, Spin } from "antd";
+import { Button, Table, Spin } from "antd";
 
 const columns = [
   {
@@ -46,7 +46,9 @@ const EmpTable = () => {
   const [spin, setSpin] = useState(false);
   async function getData() {
     setSpin(true);
-    const response = await fetch("http://192.168.1.20/apicrudphp/api/read.php");
+    const response = await fetch(
+      "http://192.168.1.20:7882/apicrudphp/api/read.php"
+    );
     const data = await response.json();
     setSpin(false);
     // console.log(data);
@@ -74,7 +76,7 @@ const EmpTable = () => {
         dataSource={loadData}
         columns={columns}
         pagination={{ pageSize: 8 }}
-        loading={{ indicator: <Spin size="large"/>, spinning: spin }}
+        loading={{ indicator: <Spin size="large" />, spinning: spin }}
       ></Table>
     </>
   );

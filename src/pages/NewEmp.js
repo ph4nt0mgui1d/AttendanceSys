@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Alert, Space } from "antd";
+import { Button, Form, Input, InputNumber, Alert } from "antd";
 import { useState } from "react";
 const layout = {
   labelCol: {
@@ -20,40 +20,60 @@ const validateMessages = {
     range: "${label} must be between ${min} and ${max}",
   },
 };
-
 const NewEmp = () => {
-
+  const [loadings, setLoadings] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
-  // const [alertVal, setAlertVal] = useState({message: "", description: "", type: ""})
-
+  const [alertVal, setAlertVal] = useState({
+    type: "",
+    message: "",
+    description: "",
+  });
+  const [form] = Form.useForm();
 
   const onFinish = async (values) => {
+    setLoadings(true);
     let formdata = new FormData();
     formdata.append("name", values.user.name);
     formdata.append("designation", values.user.designation);
     formdata.append("email", values.user.email);
     formdata.append("mobile", values.user.mobile);
-  
+
     const response = await fetch(
-      "http://192.168.1.20/apicrudphp/api/create.php",
+      "http://192.168.1.20:7882/apicrudphp/api/create.php",
       {
         method: "POST",
         body: formdata,
       }
     );
     const data = await response.json();
-  
+    setShowSuccess(true);
     if (data === 1) {
-      setShowSuccess(true);
-    }
-    else {alert("failed");}
-  };
+      setAlertVal({
+        type: "success",
+        message: "Success",
+        description: "Employee Added Successfully !!!",
+      });
 
+      setLoadings(false);
+      form.resetFields();
+    } else {
+      setLoadings(false);
+      setAlertVal({
+        type: "error",
+        message: "Failed",
+        description: "Unknown Error Occured !!!",
+      });
+    }
+  };
+  setTimeout(() => {
+    setShowSuccess(false);
+  }, 3000);
   return (
     <div style={{ width: "100%", display: "flex" }}>
       <Form
         {...layout}
         name="nest-messages"
+        form={form}
         onFinish={onFinish}
         style={{
           width: "600px",
@@ -115,18 +135,20 @@ const NewEmp = () => {
             offset: 8,
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loadings}>
             Submit
           </Button>
         </Form.Item>
       </Form>
-      {showSuccess && <Alert
-        message="Success Tips"
-        description="Detailed description and advice about successful copywriting."
-        type="success"
-        showIcon
-        style={{ width: "30%", position: "absolute", right: "30px" }}
-      />}
+      {showSuccess && (
+        <Alert
+          message={alertVal.message}
+          description={alertVal.description}
+          type={alertVal.type}
+          showIcon
+          style={{ width: "30%", position: "absolute", right: "30px" }}
+        />
+      )}
     </div>
   );
 };

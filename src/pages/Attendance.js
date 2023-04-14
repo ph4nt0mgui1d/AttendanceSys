@@ -1,27 +1,73 @@
-import React, { useState } from "react";
-
-function getCurrentDateString() {
-  const date = new Date().getDate() //current date
-  const month = new Date().getMonth() + 1 //current month
-  const year = new Date().getFullYear() //current year
-  const hours = new Date().getHours() //current hours
-  const min = new Date().getMinutes() //current minutes
-  const sec = new Date().getSeconds() //current seconds
-
-  return date + '/' + month + '/' + year + '    ' + hours + ':' + min + ':' + sec
-}
-
+import React, { useEffect, useState } from "react";
+import {Button, Table, Spin} from 'antd'
+const columns = [
+  {
+    title: "S.No.",
+    dataIndex: "sno",
+    width: "10%",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: "20%",
+  },
+  {
+    title: "Designation",
+    dataIndex: "designation",
+    width: "20%",
+  },
+  {
+    title: "In time",
+    dataIndex: "inTime",
+    width: "10%",
+  },
+  {
+    title: "Out time",
+    dataIndex: "outTime",
+    width: "10%",
+  },
+  {
+    title: "Total hours attended",
+    dataIndex: "totalHours",
+    width: "10%",
+  },
+];
 const Attendance = () => {
-  const [currentdate, setCurrentdate] = useState(getCurrentDateString())
+  const [attData, setAttData] = useState([]);
+  const [spin, setSpin] = useState(false);
 
-  return (
-    <>
-      <p>Showing current date and time</p>
-      <p></p>
-      <button
-        onPress={() => setCurrentdate(getCurrentDateString())}>click</button>
-    </>
-  );
+  const getData = async () => {
+    setSpin(true);
+    const response = await fetch('http://192.168.1.20:7882/apicrudphp/api/read.php');
+    const data = await response.json();
+    setSpin(false);
+    const loadAttData = []
+    for (const key in data) {
+      loadAttData.push({
+        sno: Number(key) + 1,
+        name: data[key].name,
+        designation: data[key].designation,
+        inTime: <Button type="primary" danger ghost>IN</Button>,
+        outTime: <Button type="primary" danger ghost>OUT</Button>,
+        totalHours: data[key].hrDiff
+      })
+    }
+    setAttData(loadAttData);
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  return <>
+    <Table
+      dataSource={attData}
+      columns={columns}
+      pagination={{ pageSize: 8 }}
+      loading={{ indicator: <Spin size="large"/>, spinning: spin }}
+    ></Table>
+  </>
 }
 
 export default Attendance;

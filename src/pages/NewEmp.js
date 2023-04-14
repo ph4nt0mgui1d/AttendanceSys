@@ -1,4 +1,5 @@
 import { Button, Form, Input, InputNumber, Alert, Space } from "antd";
+import { useState } from "react";
 const layout = {
   labelCol: {
     span: 8,
@@ -19,29 +20,35 @@ const validateMessages = {
     range: "${label} must be between ${min} and ${max}",
   },
 };
-/* eslint-enable no-template-curly-in-string */
-
-const onFinish = async (values) => {
-  let formdata = new FormData();
-  formdata.append("name", values.user.name);
-  formdata.append("designation", values.user.designation);
-  formdata.append("email", values.user.email);
-  formdata.append("mobile", values.user.mobile);
-
-  const response = await fetch(
-    "http://192.168.1.20/apicrudphp/api/create.php",
-    {
-      method: "POST",
-      body: formdata,
-    }
-  );
-  const data = await response.json();
-
-  if (data === 1) alert("Success!!");
-  else alert("failed");
-};
 
 const NewEmp = () => {
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  // const [alertVal, setAlertVal] = useState({message: "", description: "", type: ""})
+
+
+  const onFinish = async (values) => {
+    let formdata = new FormData();
+    formdata.append("name", values.user.name);
+    formdata.append("designation", values.user.designation);
+    formdata.append("email", values.user.email);
+    formdata.append("mobile", values.user.mobile);
+  
+    const response = await fetch(
+      "http://192.168.1.20/apicrudphp/api/create.php",
+      {
+        method: "POST",
+        body: formdata,
+      }
+    );
+    const data = await response.json();
+  
+    if (data === 1) {
+      setShowSuccess(true);
+    }
+    else {alert("failed");}
+  };
+
   return (
     <div style={{ width: "100%", display: "flex" }}>
       <Form
@@ -113,13 +120,13 @@ const NewEmp = () => {
           </Button>
         </Form.Item>
       </Form>
-      <Alert
+      {showSuccess && <Alert
         message="Success Tips"
         description="Detailed description and advice about successful copywriting."
         type="success"
         showIcon
         style={{ width: "30%", position: "absolute", right: "30px" }}
-      />
+      />}
     </div>
   );
 };

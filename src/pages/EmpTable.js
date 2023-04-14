@@ -74,7 +74,7 @@ const EmpTable = () => {
         dataSource={loadData}
         columns={columns}
         pagination={{ pageSize: 8 }}
-        loading={{ indicator: <Spin />, spinning: spin }}
+        loading={{ indicator: <Spin size="large"/>, spinning: spin }}
       ></Table>
     </>
   );

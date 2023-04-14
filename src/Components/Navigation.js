@@ -18,6 +18,7 @@ const Navigation = (props) => {
     admin: "Dashboard",
     empList: "Employee Details",
     newform: "Add New Employee",
+    status: "Status"
   };
   const location = useLocation().pathname;
   let fheading = location.slice(1);

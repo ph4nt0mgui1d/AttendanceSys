@@ -18,7 +18,7 @@ const Navigation = (props) => {
     admin: "Dashboard",
     empList: "Employee Details",
     newform: "Add New Employee",
-    status: "Status"
+    status: "Status",
   };
   const location = useLocation().pathname;
   let fheading = location.slice(1);
@@ -36,12 +36,8 @@ const Navigation = (props) => {
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
       >
         <Space direction="vertical" size={16}>
           <Space wrap size={16}>

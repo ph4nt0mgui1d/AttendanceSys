@@ -7,6 +7,7 @@ import NewEmp from "./pages/NewEmp";
 import Attendance from "./pages/Attendance";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navigation from "./Components/Navigation";
+import Report from './pages/Report'
 
 // const router = createBrowserRouter([
 //   {
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/emplist" element={<EmpTable />}></Route>
           <Route exact path="/newform" element={<NewEmp />}></Route>
           <Route exact path="/attendance" element={<Attendance />}></Route>
+          <Route exact path="/report" element={<Report />}></Route>
         </Routes>
       </Navigation>
     </Router>

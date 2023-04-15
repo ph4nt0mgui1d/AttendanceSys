@@ -9,7 +9,6 @@ const layout = {
   },
 };
 
-/* eslint-disable no-template-curly-in-string */
 const validateMessages = {
   required: "${label} is required!",
   types: {
@@ -39,7 +38,7 @@ const NewEmp = () => {
     formdata.append("mobile", values.user.mobile);
 
     const response = await fetch(
-      "http://192.168.1.20:7882/apicrudphp/api/create.php",
+      "http://192.168.1.21/apicrudphp/api/create.php",
       {
         method: "POST",
         body: formdata,

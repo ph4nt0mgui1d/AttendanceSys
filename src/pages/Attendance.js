@@ -7,15 +7,20 @@ const columns = [
     width: "10%",
   },
   {
+    title: "Emp ID",
+    dataIndex: "empid",
+    width: "10%",
+  },
+  {
     title: "Name",
     dataIndex: "name",
     key: "name",
-    width: "30%",
+    width: "25%",
   },
   {
     title: "Designation",
     dataIndex: "designation",
-    width: "30%",
+    width: "25%",
   },
   {
     title: "Status",
@@ -25,150 +30,116 @@ const columns = [
 ];
 
 const Attendance = () => {
-  const present = (
-    <span>
-      <Button onClick={() => presentHandler()} type="primary" danger ghost>
-        Present
-      </Button>
-      &nbsp;&nbsp;
-    </span>
-  );
-  const presentSelect = (
-    <span>
-      <Button onClick={() => presentHandler()} type="primary" ghost>
-        Present
-      </Button>
-      &nbsp;&nbsp;
-    </span>
-  );
-
-  const absent = (
-    <span>
-      <Button onClick={() => absentHandler()} type="primary" danger ghost>
-        Absent
-      </Button>
-      &nbsp;&nbsp;
-    </span>
-  );
-  const absentSelect = (
-    <span>
-      <Button onClick={() => absentHandler()} type="primary" ghost>
-        Absent
-      </Button>
-      &nbsp;&nbsp;
-    </span>
-  );
-
-  const halfday = (
-    <span>
-      &nbsp;&nbsp;
-      <Button onClick={() => halfdayHandler()} type="primary" danger ghost>
-        Half-day
-      </Button>
-    </span>
-  );
-  const halfdaySelect = (
-    <span>
-      &nbsp;&nbsp;
-      <Button onClick={() => halfdayHandler()} type="primary" ghost>
-        Half-day
-      </Button>
-    </span>
-  );
-
-  const [buttonSelector, setButtonSelector] = useState(
-    <div>
-      {present}
-      {halfday}
-      {absent}
-    </div>
-  );
-
   const [attData, setAttData] = useState([]);
   const [spin, setSpin] = useState(false);
+  const [loadings, setLoadings] = useState([]);
 
   const presentHandler = async (id) => {
-    setButtonSelector(
-      <div>
-        {presentSelect}
-        {halfday}
-        {absent}
-      </div>
-    );
+    setLoadings(true);
     const formdata = new FormData();
     formdata.append("empid", id);
     formdata.append("status", 1);
-    const response = await fetch(
-      "http://localhost/apicrudphp/api/attendance_create.php",
-      {
-        method: "POST",
-        body: formdata,
-      }
-    );
-    const data = await response.json();
+    await fetch("http://192.168.1.21/apicrudphp/api/attendance_create.php ", {
+      method: "POST",
+      body: formdata,
+    });
+    await getData();
+    setLoadings(false);
   };
 
   const absentHandler = async (id) => {
-    setButtonSelector(
-      <div>
-        {present}
-        {halfday}
-        {absentSelect}
-      </div>
-    );
-
+    setLoadings(true);
     const formdata = new FormData();
     formdata.append("empid", id);
     formdata.append("status", 0);
-    const response = await fetch(
-      "http://localhost/apicrudphp/api/attendance_create.php",
-      {
-        method: "POST",
-        body: formdata,
-      }
-    );
-
-    const data = await response.json();
-    console.log(data);
+    await fetch("http://192.168.1.21/apicrudphp/api/attendance_create.php", {
+      method: "POST",
+      body: formdata,
+    });
+    await getData();
+    setLoadings(false);
   };
 
   const halfdayHandler = async (id) => {
-    setButtonSelector(
-      <div>
-        {present}
-        {halfdaySelect}
-        {absent}
-      </div>
-    );
-
+    setLoadings(true);
     const formdata = new FormData();
     formdata.append("empid", id);
     formdata.append("status", 2);
-    const response = await fetch(
-      "http://localhost/apicrudphp/api/attendance_create.php",
-      {
-        method: "POST",
-        body: formdata,
-      }
-    );
-    const data = await response.json();
+    await fetch("http://192.168.1.21/apicrudphp/api/attendance_create.php", {
+      method: "POST",
+      body: formdata,
+    });
+    await getData();
+    setLoadings(false);
   };
-
+  const getButtons = (empuid, statusid) => {
+    if (statusid == 0) {
+      return (
+        <>
+          <Button onClick={() => presentHandler(empuid)} loading={loadings}>
+            Present
+          </Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => halfdayHandler(empuid)} loading={loadings}>Half-Day</Button>
+          &nbsp;&nbsp;
+          <Button type="primary" danger>
+            Absent
+          </Button>
+        </>
+      );
+    } else if (statusid == 1) {
+      return (
+        <>
+          <Button type="primary">Present</Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => halfdayHandler(empuid)} loading={loadings}>Half-Day</Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => absentHandler(empuid)} loading={loadings}>Absent</Button>
+        </>
+      );
+    } else if (statusid == 2) {
+      return (
+        <>
+          <Button onClick={() => presentHandler(empuid)} loading={loadings}>Present</Button>
+          &nbsp;&nbsp;
+          <Button type="primary">Half-Day</Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => absentHandler(empuid)} loading={loadings}>Absent</Button>
+        </>
+      );
+    } else if (statusid == 3) {
+      return (
+        <>
+          <Button onClick={() => presentHandler(empuid)} loading={loadings}>
+            Present
+          </Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => halfdayHandler(empuid)} loading={loadings}>
+            Half-Day
+          </Button>
+          &nbsp;&nbsp;
+          <Button onClick={() => absentHandler(empuid)} loading={loadings}>Absent</Button>
+        </>
+      );
+    }
+    // return statusid;
+  };
   const getData = async () => {
     setSpin(true);
     const response = await fetch(
-      "http://localhost/apicrudphp/api/attendance.php"
+      "http://192.168.1.21/apicrudphp/api/attendance.php"
     );
     const data = await response.json();
     setSpin(false);
     const loadAttData = [];
     for (const key in data) {
+      const emuid = data[key].id;
       loadAttData.push({
         sno: Number(key) + 1,
         empid: data[key].id,
         name: data[key].name,
         designation: data[key].designation,
-        status: data[key].status,
+        status: getButtons(emuid, data[key].status),
       });
     }
     setAttData(loadAttData);

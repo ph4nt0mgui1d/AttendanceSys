@@ -47,7 +47,7 @@ const EmpTable = () => {
   async function getData() {
     setSpin(true);
     const response = await fetch(
-      "http://192.168.1.20:7882/apicrudphp/api/read.php"
+      "http://192.168.1.21/apicrudphp/api/read.php"
     );
     const data = await response.json();
     setSpin(false);

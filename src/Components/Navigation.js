@@ -3,6 +3,7 @@ import {
   UnorderedListOutlined,
   UserOutlined,
   PieChartOutlined,
+  AlignLeftOutlined
 } from "@ant-design/icons";
 import React, { useState } from "react";
 import { Avatar, Space } from "antd";
@@ -19,6 +20,7 @@ const Navigation = (props) => {
     empList: "Employee Details",
     newform: "Add New Employee",
     status: "Status",
+    report: "Attendance Report"
   };
   const location = useLocation().pathname;
   let fheading = location.slice(1);
@@ -72,6 +74,9 @@ const Navigation = (props) => {
             <Item key="attendance" icon={<PieChartOutlined />}>
               <Link to="/attendance">Attendance</Link>
             </Item>
+            <Item key="report" icon={<AlignLeftOutlined />}>
+              <Link to="/report">Attendance Report</Link>
+            </Item>
           </SubMenu>
         </Menu>
         {/* Main Nav end  */}
@@ -105,6 +110,7 @@ const Navigation = (props) => {
               padding: 24,
               height: "87vh",
               background: colorBgContainer,
+              overflow: "scroll"
             }}
           >
             {props.children}
